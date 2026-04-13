@@ -9,6 +9,9 @@ COPY . .
 
 RUN npm run build
 
+# Verify dist was created
+RUN ls -la dist/ && echo "Build successful"
+
 RUN mkdir -p /app/uploads /app/logs
 
 EXPOSE 3000
