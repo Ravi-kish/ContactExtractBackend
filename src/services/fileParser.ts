@@ -151,7 +151,7 @@ export async function parseCSV(filePath: string): Promise<ParseResult> {
       complete: () => {
         resolve({ records, totalRows, errorRows, errors: errors.slice(0, 100) });
       },
-      error: (err) => {
+      error: (err: Error) => {
         logger.error('CSV parse error:', err);
         resolve({ records, totalRows, errorRows: totalRows, errors: [err.message] });
       },
