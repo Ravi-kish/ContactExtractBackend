@@ -17,6 +17,15 @@ async function bootstrap(): Promise<void> {
     fs.mkdirSync('logs', { recursive: true });
   }
 
+  // Test DB connection
+  try {
+    await db.raw('SELECT 1');
+    logger.info('Database connected');
+  } catch (err) {
+    logger.error('Database connection failed — check DB env vars:', err);
+    // Don't exit — let health endpoint report the issue
+  }
+
   // Tables already created via schema.sql — skip migrations
   logger.info('Database schema ready');
 
