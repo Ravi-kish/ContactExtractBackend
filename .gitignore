@@ -1,0 +1,15 @@
+.env
+node_modules/
+dist/
+uploads/
+logs/
+node_modules/
+dist/
+*.log
+logs/
+
+# Excel temp/test files
+*.xlsx
+*.xls
+*.csv
+~$*
