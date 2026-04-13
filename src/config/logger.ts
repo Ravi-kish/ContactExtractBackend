@@ -1,12 +1,27 @@
 import winston from 'winston';
-import { config } from './index';
+
+const isProduction = process.env.NODE_ENV === 'production';
+
+const transports: winston.transport[] = [
+  new winston.transports.Console(),
+];
+
+// Only write to files in development
+if (!isProduction) {
+  try {
+    transports.push(new winston.transports.File({ filename: 'logs/error.log', level: 'error' }));
+    transports.push(new winston.transports.File({ filename: 'logs/combined.log' }));
+  } catch {
+    // ignore file transport errors
+  }
+}
 
 export const logger = winston.createLogger({
-  level: config.nodeEnv === 'production' ? 'info' : 'debug',
+  level: isProduction ? 'info' : 'debug',
   format: winston.format.combine(
     winston.format.timestamp(),
     winston.format.errors({ stack: true }),
-    config.nodeEnv === 'production'
+    isProduction
       ? winston.format.json()
       : winston.format.combine(
           winston.format.colorize(),
@@ -16,9 +31,5 @@ export const logger = winston.createLogger({
           })
         )
   ),
-  transports: [
-    new winston.transports.Console(),
-    new winston.transports.File({ filename: 'logs/error.log', level: 'error' }),
-    new winston.transports.File({ filename: 'logs/combined.log' }),
-  ],
+  transports,
 });
