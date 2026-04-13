@@ -33,9 +33,9 @@ async function bootstrap(): Promise<void> {
   startWorker();
   scheduleOrphanCleanup(config.uploadDir, 24);
 
-  // Start HTTP server
-  const server = app.listen(config.port, () => {
-    logger.info(`CDR API server running on port ${config.port}`);
+  const port = parseInt(process.env.PORT || '3000', 10);
+  const server = app.listen(port, '0.0.0.0', () => {
+    logger.info(`CDR API server running on port ${port}`);
   });
 
   // Graceful shutdown
