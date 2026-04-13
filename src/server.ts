@@ -50,7 +50,17 @@ async function bootstrap(): Promise<void> {
   process.on('SIGINT', shutdown);
 }
 
+process.on('uncaughtException', (err) => {
+  console.error('Uncaught Exception:', err);
+  console.error('Stack:', err.stack);
+});
+
+process.on('unhandledRejection', (reason) => {
+  console.error('Unhandled Rejection:', reason);
+});
+
 bootstrap().catch((err) => {
   console.error('Bootstrap failed:', err);
-  process.exit(1);
+  console.error('Stack:', err.stack);
+  setTimeout(() => process.exit(1), 1000);
 });
